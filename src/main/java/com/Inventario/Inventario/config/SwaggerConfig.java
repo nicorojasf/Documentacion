@@ -12,9 +12,9 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("Inventario API")
+                        .title("Inventario API - Clinica BUPA")
                         .version("7.0")
-                        .description("API para gestión de inventario de prendas"));
+                        .description("API para gestión de inventario de prendas en la clínica BUPA, encontra información sobre prendas,stock, y más."));
     }
     
 }
