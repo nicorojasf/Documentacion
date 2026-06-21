@@ -33,7 +33,7 @@ public class Prendas {
     @Schema(description = "Categoría de la prenda", example = "Ropa de paciente")
     private String categoria;
 
-    @Column(name = "STOCK_ACTUAL", nullable = false)
+    @Column(name = "stock_actual", nullable = false)
     @Schema(description = "Stock actual de la prenda", example = "10")
     private Integer stockActual;
 

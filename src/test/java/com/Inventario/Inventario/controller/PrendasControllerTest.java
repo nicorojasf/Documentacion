@@ -37,7 +37,7 @@ public class PrendasControllerTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @MockitoBean // Si te da error de compilación en versiones ultra recientes, usa @MockitoBean
+    @MockitoBean 
     private PrendasService prendasService;
 
     @Test
@@ -46,7 +46,6 @@ public class PrendasControllerTest {
         Prendas prenda = PrendasTestDataFactory.crearPrendaValida();
         when(prendasService.obtenerTodas()).thenReturn(List.of(prenda));
 
-        // Inyectamos el usuario directamente en el perform() con .with(user(...))
         mockMvc.perform(get("/api/prendas/listar")
                 .with(user("admin").roles("USER", "ADMIN")))
                 .andExpect(status().isOk())
@@ -62,13 +61,12 @@ public class PrendasControllerTest {
         Prendas prenda = PrendasTestDataFactory.crearPrendaValida();
         when(prendasService.guardar(any(Prendas.class))).thenReturn(prenda);
 
-        // Inyectamos usuario logueado + bypass al CSRF directamente aquí
-        mockMvc.perform(post("/api/prendas/guardar")
+        mockMvc.perform(post("/api/prendas/guardar") // Para buscar el error 404 cambiamos el endpoint a /guardar-rutas
                 .with(user("admin").roles("USER", "ADMIN"))
                 .with(csrf()) 
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(prenda)))
-                .andExpect(status().isCreated())
+                .content(objectMapper.writeValueAsString(prenda))) 
+                .andExpect(status().isCreated()) //CAMBIOS A ISNOTFOUND PARA VER EL ERROR 404
                 .andExpect(jsonPath("$.nombrePrenda").value("Kimono"));
 
         verify(prendasService).guardar(any(Prendas.class));
@@ -81,8 +79,6 @@ public class PrendasControllerTest {
         // Given
         Integer idPrenda = 1;
         Integer cantidad = 5;
-        
-        // Como el método del servicio es void, usamos doNothing()
         doNothing().when(prendasService).descontarStock(idPrenda, cantidad);
 
         // When + Then
